@@ -2,6 +2,10 @@
 
 A Video Player Flutter plugin based on TXVodPlayer
 
+*Note*: This plugin is still under development, and some APIs might not be available yet.
+[Feedback welcome](https://github.com/RandyWei/flt_video_player/issues) and
+[Pull Requests](https://github.com/RandyWei/flt_video_player/pulls) are most welcome!
+
 ## Installation
 First, add `flt_video_player` as a [dependency in your pubspec.yaml file](https://flutter.io/using-packages/).
 

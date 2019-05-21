@@ -20,8 +20,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    //该视频为直播源，没有时长
     controller = VideoPlayerController.path(
-        "https://look.chinahrt.com.cn//courseyun/rx/topic/video/170508/149421376907147ae58ea-09f2-4b7c-a22c-11567a5ae96b.mp4")
+        "http://5815.liveplay.myqcloud.com/live/5815_89aad37e06ff11e892905cb9018cf0d4_900.flv")
       ..initialize();
 
     _listener = () {
@@ -228,14 +229,16 @@ class _SliderWidgetState extends State<_SliderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Slider(
-        max: widget.controller.value.duration.inMilliseconds.toDouble(),
-        value: position,
-        onChanged: (double value) {
-          setState(() {
-            position = value.roundToDouble();
-            widget.controller.seekTo(Duration(milliseconds: position.toInt()));
-          });
-        });
+    return widget.controller.value.duration.inMilliseconds.toDouble() > position
+        ? Slider(
+            max: widget.controller.value.duration.inMilliseconds.toDouble(),
+            value: position,
+            onChanged: (double value) {
+              setState(() {
+                position = value.roundToDouble();
+                widget.controller.seekTo(Duration(milliseconds: position.toInt()));
+              });
+            })
+        : Container();
   }
 }

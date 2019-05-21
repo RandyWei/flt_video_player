@@ -17,7 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(readonly,nonatomic) TXVodPlayer* txPlayer;
 @property(nonatomic) FlutterEventChannel* eventChannel;
 @property(nonatomic) FlutterEventSink eventSink;
-@property(nonatomic) CVPixelBufferRef pixelBuffer;
+@property(nonatomic) CVPixelBufferRef newPixelBuffer;
+@property(nonatomic) CVPixelBufferRef lastestPixelBuffer;
 @property(nonatomic, readonly) bool disposed;
 /**
  * 是否循环播放

@@ -6,7 +6,7 @@
 //
 
 #import "FLTVideoPlayer.h"
-
+#import <libkern/OSAtomic.h>
 
 @implementation FLTVideoPlayer
 
@@ -32,9 +32,18 @@
 
 #pragma FlutterTexture
 - (CVPixelBufferRef)copyPixelBuffer {
-    if(_pixelBuffer!=nil){
+    if(_newPixelBuffer!=nil){
         //出现过的异常：Signal 11 was raised, 原因：使用被释放掉的对象,注意内存问题
-        CVPixelBufferRef pixelBuffer = CVPixelBufferRetain(_pixelBuffer);
+        //ijk解决问题如下：弄不清楚原理
+        CFRetain(_newPixelBuffer);
+        CVPixelBufferRef pixelBuffer = _lastestPixelBuffer;
+        while (!OSAtomicCompareAndSwapPtrBarrier(pixelBuffer, _newPixelBuffer, (void **) &_lastestPixelBuffer)) {
+            NSLog(@"OSAtomicCompareAndSwapPtrBarrier");
+            pixelBuffer = _lastestPixelBuffer;
+        }
+        
+        
+        //CVPixelBufferRef pixelBuffer = CVPixelBufferRetain(_newPixelBuffer);
         return pixelBuffer;
     }
     return NULL;
@@ -137,7 +146,7 @@
  出现过的异常：Signal 11 was raised, 原因：使用被释放掉的对象
  */
 - (BOOL)onPlayerPixelBuffer:(CVPixelBufferRef)pixelBuffer{
-    _pixelBuffer = pixelBuffer;
+    _newPixelBuffer = pixelBuffer;
     [_frameUpdater refreshDisplay];
     return NO;
 }

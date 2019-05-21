@@ -20,7 +20,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
     controller = VideoPlayerController.path(
         "https://look.chinahrt.com.cn//courseyun/rx/topic/video/170508/149421376907147ae58ea-09f2-4b7c-a22c-11567a5ae96b.mp4")
       ..initialize();

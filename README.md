@@ -22,11 +22,23 @@ dependencies:
 
 ### Android
 
-Ensure the following permission is present in your Android Manifest file, located in `<project root>/android/app/src/main/AndroidManifest.xml:
+Ensure the following permission and tools:replace="android:label" is present in your Android Manifest file, located in `<project root>/android/app/src/main/AndroidManifest.xml:
 
 ```xml
-<uses-permission android:name="android.permission.INTERNET"/>
+<manifest
+    ...
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        ...
+        tools:replace="android:label">
+        ...
+    </application>
+</manifest>
 ```
+
 
 The Flutter project template adds it, so it may already be there.
 

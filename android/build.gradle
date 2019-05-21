@@ -40,5 +40,6 @@ android {
 }
 
 dependencies {
+    implementation files('libs/LiteAVSDK_Player_6.3.7089.aar')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

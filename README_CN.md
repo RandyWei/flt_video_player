@@ -2,13 +2,19 @@
 
 基于腾讯云播放器TXVodPlayer封装的Flutter Video Player
 
-## Getting Started
+## Installation
+First, add `flt_video_player` as a [dependency in your pubspec.yaml file](https://flutter.io/using-packages/).
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+### Android
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Ensure the following permission is present in your Android Manifest file, located in `<project root>/android/app/src/main/AndroidManifest.xml:
+
+```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+```
+
+The Flutter project template adds it, so it may already be there.
+
+### Supported Formats
+The backing player is [TxVodPlayer](https://cloud.tencent.com/document/product/881/),
+  please refer [here](https://cloud.tencent.com/document/product/881/) for list of supported formats.

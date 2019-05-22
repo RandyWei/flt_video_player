@@ -1,8 +1,8 @@
 name: flt_video_player
 description: A Video Player Flutter plugin based on TXVodPlayer
-version: 0.0.1
-author: RandyWei<smile561607154@163.com>
-homepage:
+version: 0.0.1-alpha.1
+author: Randy Wei<smile561607154@163.com>
+repository: https://github.com/RandyWei/flt_video_player
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

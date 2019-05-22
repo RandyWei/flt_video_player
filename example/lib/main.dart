@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:flt_video_player/video_player.dart';
+import 'package:flt_video_player/flt_video_player.dart';
 
 void main() => runApp(MyApp());
 

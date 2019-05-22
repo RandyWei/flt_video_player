@@ -1,4 +1,4 @@
-import 'package:flt_video_player/video_player.dart';
+import 'package:flt_video_player/flt_video_player.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());

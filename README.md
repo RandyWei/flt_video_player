@@ -46,6 +46,8 @@ The Flutter project template adds it, so it may already be there.
 The backing player is [TxVodPlayer](https://cloud.tencent.com/document/product/881/),
   please refer [here](https://cloud.tencent.com/document/product/881/) for list of supported formats.
 
+### Screenshot
+![screenshot](https://github.com/RandyWei/flt_video_player/blob/master/screenshot/device-2019-05-22-100616.png)
 
 ### Example
 ```dart

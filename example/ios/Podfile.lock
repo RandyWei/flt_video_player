@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/flutter/ios"
 
 SPEC CHECKSUMS:
-  flt_video_player: 728f965e43d0ddb2147a670306497ff23ef090ba
+  flt_video_player: 64d55a32dd44326053cddc53de701c4820888ce5
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
   TXLiteAVSDK_Player: 3465cf9ca986016e64c8c66694abb39f213a1492
 

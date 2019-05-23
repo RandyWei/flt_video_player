@@ -2,6 +2,8 @@
 
 基于腾讯云播放器TXVodPlayer封装的Flutter Video Player
 
+#### [English](https://github.com/RandyWei/flt_video_player/blob/master/README.md) | 中文文档
+
 ## 安装
 
 ```

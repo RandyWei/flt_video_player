@@ -6,6 +6,8 @@ A Video Player Flutter plugin based on TXVodPlayer
 [Feedback welcome](https://github.com/RandyWei/flt_video_player/issues) and
 [Pull Requests](https://github.com/RandyWei/flt_video_player/pulls) are most welcome!
 
+#### English | [中文文档](https://github.com/RandyWei/flt_video_player/blob/master/README_CN.md)
+
 ## Installation
 
 ```

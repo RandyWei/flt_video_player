@@ -2,15 +2,50 @@
 
 Demonstrates how to use the flt_video_player plugin.
 
-## Getting Started
+### Example
+```dart
+import 'package:flt_video_player/flt_video_player.dart';
+import 'package:flutter/material.dart';
 
-This project is a starting point for a Flutter application.
+void main() => runApp(MyApp());
 
-A few resources to get you started if this is your first Flutter project:
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+class _MyAppState extends State<MyApp> {
+  VideoPlayerController _controller;
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.path(
+        "https://github.com/RandyWei/flt_video_player/blob/master/example/SampleVideo_1280x720_30mb.mp4?raw=true")
+      ..initialize();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "Simple Demo",
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Simple Demo"),
+        ),
+        body: AspectRatio(
+          aspectRatio: 1.8,
+          child: VideoPlayer(_controller),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller?.dispose();
+  }
+}
+
+```

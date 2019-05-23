@@ -9,7 +9,7 @@ A Video Player Flutter plugin based on TXVodPlayer
 ## Installation
 
 ```
-//pub(暂未上传)
+//pub
 dependencies:
   flt_video_player: ^0.0.1
 

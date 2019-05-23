@@ -2,11 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-final MethodChannel _channel = const MethodChannel('bughub.dev/flutterVideoPlayer')
-  ..invokeMethod('init');
+final MethodChannel _channel =
+    const MethodChannel('bughub.dev/flutterVideoPlayer')..invokeMethod('init');
 
 class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
-  VideoPlayerController.path(this.dataSource, {this.startPosition = 0, this.playerConfig})
+  VideoPlayerController.path(this.dataSource,
+      {this.startPosition = 0, this.playerConfig})
       : super(VideoPlayerValue(duration: null));
 
   int _textureId;
@@ -30,7 +31,8 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
       playerConfig = PlayerConfig();
     }
 
-    final Map<dynamic, dynamic> response = await _channel.invokeMethod('create', {
+    final Map<dynamic, dynamic> response =
+        await _channel.invokeMethod('create', {
       "path": dataSource,
       "startPosition": startPosition,
       "playerConfig": playerConfig.toJson()
@@ -81,7 +83,8 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
     }
 
     EventChannel _eventChannelFor(int textureId) {
-      return EventChannel('bughub.dev/flutterVideoPlayer/videoEvents$textureId');
+      return EventChannel(
+          'bughub.dev/flutterVideoPlayer/videoEvents$textureId');
     }
 
     _eventSubscription = _eventChannelFor(_textureId)

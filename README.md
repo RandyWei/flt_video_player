@@ -32,6 +32,7 @@ Ensure the following permission and tools:replace="android:label" is present in 
     xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         ...

@@ -1,6 +1,6 @@
 name: flt_video_player
 description: A Video Player Flutter plugin based on TXVodPlayer, Flutter plugin for displaying inline video with other Flutter widgets on Android and iOS.
-version: 0.0.2
+version: 0.0.3
 author: Randy Wei<smile561607154@163.com>
 homepage: https://github.com/RandyWei/flt_video_player
 repository: https://github.com/RandyWei/flt_video_player

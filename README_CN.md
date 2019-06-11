@@ -19,7 +19,7 @@ dependencies:
 ```
 
 ### Android
-确定在mainfest中添加网络权限
+确定在mainfest中添加以下权限
 确定在application标签中添加tools:replace="android:label"属性，示例如下:
 
 ```xml
@@ -28,6 +28,7 @@ dependencies:
     xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         ...

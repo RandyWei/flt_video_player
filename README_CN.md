@@ -9,7 +9,7 @@
 ```
 //pub方式
 dependencies:
-  flt_video_player: ^0.0.2
+  flt_video_player: ^0.0.4
 
 //导入方式
 dependencies:

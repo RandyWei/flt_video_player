@@ -21,8 +21,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     //该视频为直播源，没有时长 http://5815.liveplay.myqcloud.com/live/5815_89aad37e06ff11e892905cb9018cf0d4_900.flv
+    //http://vfx.mtime.cn/Video/2019/02/04/mp4/190204084208765161.mp4
+    //https://look.chinahrt.com.cn//courseyun/rx/topic/video/170508/149421376907147ae58ea-09f2-4b7c-a22c-11567a5ae96b.mp4
+    //https://www.sample-videos.com/index.php#sample-mp4-video
     controller = VideoPlayerController.path(
-        "https://look.chinahrt.com.cn//courseyun/rx/topic/video/170508/149421376907147ae58ea-09f2-4b7c-a22c-11567a5ae96b.mp4")
+        "http://vfx.mtime.cn/Video/2019/03/21/mp4/190321153853126488.mp4")
       ..initialize();
 
     _listener = () {

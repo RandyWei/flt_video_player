@@ -27,26 +27,92 @@
         NSLog(@"播放器启动失败");
         return nil;
     }
+    NSLog(@"播放器初始化结束");
     return self;
 }
 
 #pragma FlutterTexture
 - (CVPixelBufferRef)copyPixelBuffer {
-    if(_newPixelBuffer!=nil){
+    if(self.newPixelBuffer!=nil){
         //出现过的异常：Signal 11 was raised, 原因：使用被释放掉的对象,注意内存问题
         //ijk解决问题如下：弄不清楚原理
-        CFRetain(_newPixelBuffer);
-        CVPixelBufferRef pixelBuffer = _lastestPixelBuffer;
-        while (!OSAtomicCompareAndSwapPtrBarrier(pixelBuffer, _newPixelBuffer, (void **) &_lastestPixelBuffer)) {
+        CVPixelBufferRetain(self.newPixelBuffer);
+        CVPixelBufferRef pixelBuffer = self.lastestPixelBuffer;
+        while (!OSAtomicCompareAndSwapPtrBarrier(pixelBuffer, self.newPixelBuffer, (void **) &_lastestPixelBuffer)) {
             NSLog(@"OSAtomicCompareAndSwapPtrBarrier");
-            pixelBuffer = _lastestPixelBuffer;
+            pixelBuffer = self.lastestPixelBuffer;
         }
-        
-        
-        //CVPixelBufferRef pixelBuffer = CVPixelBufferRetain(_newPixelBuffer);
         return pixelBuffer;
     }
     return NULL;
+}
+
+#pragma 腾讯播放器代理回调方法
+
+/**
+ 视频渲染对象回调
+ @param pixelBuffer 渲染图像，此为C引用，注意内存管理问题
+ @return 返回YES则SDK不再显示；返回NO则SDK渲染模块继续渲染
+ 说明：渲染图像的数据类型为config中设置的renderPixelFormatType
+ 出现过的异常：Signal 11 was raised, 原因：使用被释放掉的对象
+ */
+- (BOOL)onPlayerPixelBuffer:(CVPixelBufferRef)pixelBuffer{
+    self.newPixelBuffer = pixelBuffer;
+    [self.frameUpdater refreshDisplay];
+    return NO;
+}
+
+/**
+ * 点播事件通知
+ *
+ * @param player 点播对象
+ * @param EvtID 参见TXLiveSDKEventDef.h
+ * @param param 参见TXLiveSDKTypeDef.h
+ * @see TXVodPlayer
+ */
+-(void)onPlayEvent:(TXVodPlayer *)player event:(int)EvtID withParam:(NSDictionary *)param{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (EvtID==PLAY_EVT_RCV_FIRST_I_FRAME) {//渲染首个视频数据包(IDR)
+            self->_eventSink(@{
+                               @"event":@"PLAY_EVT_RCV_FIRST_I_FRAME",@"rawEvent":@(EvtID),}
+                             );
+        }
+        if (EvtID == PLAY_EVT_VOD_LOADING_END || EvtID == PLAY_EVT_VOD_PLAY_PREPARED) {//loading结束（点播）,视频加载完毕（点播）
+            self->_eventSink(@{@"event":@"PLAY_EVT_VOD_LOADING_END",@"rawEvent":@(EvtID),});
+        }
+        if (EvtID == PLAY_EVT_PLAY_BEGIN) {//视频播放开始
+            int64_t progress = [player currentPlaybackTime];
+            int64_t duration = [player duration];
+            self->_eventSink(@{@"event":@"PLAY_EVT_PLAY_BEGIN",
+                               @"rawEvent":@(EvtID),
+                               @"position":@(progress),
+                               @"duration":@(duration)
+                               });
+        }else if(EvtID == PLAY_EVT_PLAY_PROGRESS){//视频播放进度
+            if ([player isPlaying]) {
+                int64_t progress = [player currentPlaybackTime];
+                int64_t duration = [player duration];
+                self->_eventSink(@{@"event":@"PLAY_EVT_PLAY_PROGRESS",
+                                   @"rawEvent":@(EvtID),
+                                   @"position":@(progress),
+                                   @"duration":@(duration)
+                                   });
+            }
+        }else if (EvtID == PLAY_ERR_NET_DISCONNECT || EvtID == PLAY_EVT_PLAY_END || EvtID == PLAY_ERR_FILE_NOT_FOUND || EvtID == PLAY_ERR_HLS_KEY || EvtID == PLAY_ERR_GET_PLAYINFO_FAIL) {//网络断连,且经多次重连抢救无效,可以放弃治疗,更多重试请自行重启播放;视频播放结束;播放文件不存在;HLS解码key获取失败;获取点播文件信息失败
+            self->_eventSink(@{@"event":@"PLAY_EVT_PLAY_END",@"rawEvent":@(EvtID),});
+        }
+        else if (EvtID == PLAY_EVT_PLAY_LOADING){//视频播放loading
+            self->_eventSink(@{@"event":@"PLAY_EVT_PLAY_LOADING",@"rawEvent":@(EvtID),});
+        }
+        else if (EvtID == PLAY_EVT_CONNECT_SUCC) {//已经连接服务器
+            self->_eventSink(@{@"event":@"PLAY_EVT_CONNECT_SUCC",@"rawEvent":@(EvtID),});
+        }
+    });
+}
+
+- (void)onNetStatus:(TXVodPlayer *)player withParam:(NSDictionary *)param {
+    
 }
 
 #pragma FlutterStreamHandler
@@ -136,72 +202,6 @@
     
 }
 
-#pragma 腾讯播放器代理回调方法
 
-/**
- 视频渲染对象回调
- @param pixelBuffer 渲染图像，此为C引用，注意内存管理问题
- @return 返回YES则SDK不再显示；返回NO则SDK渲染模块继续渲染
- 说明：渲染图像的数据类型为config中设置的renderPixelFormatType
- 出现过的异常：Signal 11 was raised, 原因：使用被释放掉的对象
- */
-- (BOOL)onPlayerPixelBuffer:(CVPixelBufferRef)pixelBuffer{
-    _newPixelBuffer = pixelBuffer;
-    [_frameUpdater refreshDisplay];
-    return NO;
-}
-
-/**
- * 点播事件通知
- *
- * @param player 点播对象
- * @param EvtID 参见TXLiveSDKEventDef.h
- * @param param 参见TXLiveSDKTypeDef.h
- * @see TXVodPlayer
- */
--(void)onPlayEvent:(TXVodPlayer *)player event:(int)EvtID withParam:(NSDictionary *)param{
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (EvtID==PLAY_EVT_RCV_FIRST_I_FRAME) {//渲染首个视频数据包(IDR)
-            self->_eventSink(@{
-                               @"event":@"PLAY_EVT_RCV_FIRST_I_FRAME",@"rawEvent":@(EvtID),}
-                             );
-        }
-        if (EvtID == PLAY_EVT_VOD_LOADING_END || EvtID == PLAY_EVT_VOD_PLAY_PREPARED) {//loading结束（点播）,视频加载完毕（点播）
-            self->_eventSink(@{@"event":@"PLAY_EVT_VOD_LOADING_END",@"rawEvent":@(EvtID),});
-        }
-        if (EvtID == PLAY_EVT_PLAY_BEGIN) {//视频播放开始
-            int64_t progress = [player currentPlaybackTime];
-            int64_t duration = [player duration];
-            self->_eventSink(@{@"event":@"PLAY_EVT_PLAY_BEGIN",
-                               @"rawEvent":@(EvtID),
-                               @"position":@(progress),
-                               @"duration":@(duration)
-                               });
-        }else if(EvtID == PLAY_EVT_PLAY_PROGRESS){//视频播放进度
-            if ([player isPlaying]) {
-                int64_t progress = [player currentPlaybackTime];
-                int64_t duration = [player duration];
-                self->_eventSink(@{@"event":@"PLAY_EVT_PLAY_PROGRESS",
-                                   @"rawEvent":@(EvtID),
-                                   @"position":@(progress),
-                                   @"duration":@(duration)
-                                   });
-            }
-        }else if (EvtID == PLAY_ERR_NET_DISCONNECT || EvtID == PLAY_EVT_PLAY_END || EvtID == PLAY_ERR_FILE_NOT_FOUND || EvtID == PLAY_ERR_HLS_KEY || EvtID == PLAY_ERR_GET_PLAYINFO_FAIL) {//网络断连,且经多次重连抢救无效,可以放弃治疗,更多重试请自行重启播放;视频播放结束;播放文件不存在;HLS解码key获取失败;获取点播文件信息失败
-            self->_eventSink(@{@"event":@"PLAY_EVT_PLAY_END",@"rawEvent":@(EvtID),});
-        }
-        else if (EvtID == PLAY_EVT_PLAY_LOADING){//视频播放loading
-            self->_eventSink(@{@"event":@"PLAY_EVT_PLAY_LOADING",@"rawEvent":@(EvtID),});
-        }
-        else if (EvtID == PLAY_EVT_CONNECT_SUCC) {//已经连接服务器
-            self->_eventSink(@{@"event":@"PLAY_EVT_CONNECT_SUCC",@"rawEvent":@(EvtID),});
-        }
-    });
-}
-
-- (void)onNetStatus:(TXVodPlayer *)player withParam:(NSDictionary *)param {
-    
-}
 
 @end

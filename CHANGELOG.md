@@ -1,3 +1,7 @@
+## 0.0.4
+
+* fix ios bug
+
 ## 0.0.3
 
 * compress the APK size

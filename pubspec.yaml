@@ -1,12 +1,11 @@
 name: flt_video_player
-description: A Video Player Flutter plugin based on TXVodPlayer, Flutter plugin for displaying inline video with other Flutter widgets on Android and iOS.
-version: 0.0.4
-author: Randy Wei<smile561607154@163.com>
-homepage: https://github.com/RandyWei/flt_video_player
-repository: https://github.com/RandyWei/flt_video_player
+description: A new Flutter project.
+version: 0.0.1
+homepage:
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.20.0"
 
 dependencies:
   flutter:
@@ -15,24 +14,29 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
-# following page: https://www.dartlang.org/tools/pub/pubspec
+# following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
   # This section identifies this Flutter project as a plugin project.
-  # The androidPackage and pluginClass identifiers should not ordinarily
+  # The 'pluginClass' and Android 'package' identifiers should not ordinarily
   # be modified. They are used by the tooling to maintain consistency when
   # adding or updating assets for this project.
   plugin:
-    androidPackage: dev.bughub.flt_video_player
-    pluginClass: FltVideoPlayerPlugin
+    platforms:
+      android:
+        package: icu.bughub.plugins.video_player.flt_video_player
+        pluginClass: FltVideoPlayerPlugin
+      ios:
+        pluginClass: FltVideoPlayerPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
-  #  - images/a_dot_burr.jpeg
-  #  - images/a_dot_ham.jpeg
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

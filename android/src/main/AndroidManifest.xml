@@ -1,3 +1,3 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="dev.bughub.flt_video_player">
+  package="icu.bughub.plugins.video_player.flt_video_player">
 </manifest>

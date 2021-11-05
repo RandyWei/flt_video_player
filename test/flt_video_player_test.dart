@@ -1,3 +1,4 @@
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flt_video_player/flt_video_player.dart';
@@ -18,6 +19,6 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    expect(await FltVideoPlayer.platformVersion, '42');
+    expect(await Plugin.platformVersion, '42');
   });
 }

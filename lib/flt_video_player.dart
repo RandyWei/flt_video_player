@@ -1,13 +1,3 @@
-
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-
-class FltVideoPlayer {
-  static const MethodChannel _channel = MethodChannel('flt_video_player');
-
-  static Future<String?> get platformVersion async {
-    final String? version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
-}
+export 'src/plugin.dart';
+export 'src/vod/vod_player.dart';
+export 'src/vod/vodplayer_controller.dart';

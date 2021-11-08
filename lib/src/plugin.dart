@@ -24,6 +24,6 @@ class Plugin {
   }
 
   static Future<int> releasePlayer(int playerId) async {
-    return await _channel.invokeMethod("releasePlayer", {"playerId": playerId});
+    return await _channel.invokeMethod("releaseVodPlayer", {"playerId": playerId});
   }
 }

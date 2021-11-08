@@ -156,7 +156,6 @@ static const int uninitialized = -1;
 ///开始播放
 ///
 -(int)startPlay:(NSString*)url{
-    NSLog(@"startPlay_vodPlayer:%@",_vodPlayer);
     if(_vodPlayer != nil){
         return [_vodPlayer startPlay:url];
     }

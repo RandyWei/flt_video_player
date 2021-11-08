@@ -219,6 +219,7 @@ class VodPlayerController extends ChangeNotifier
         ?.invokeMethod("setRenderRotation", {"rotaion": rotaion.index});
   }
 
+  ///获取是否正在播放
   Future<bool> get isPlaying async {
     if (_isNeedDisposed) return false;
 
@@ -227,6 +228,7 @@ class VodPlayerController extends ChangeNotifier
     return await _channel?.invokeMethod("isPlaying");
   }
 
+  ///当前播放进度
   Future<bool> get currentPlaybackTime async {
     if (_isNeedDisposed) return false;
 
@@ -235,6 +237,7 @@ class VodPlayerController extends ChangeNotifier
     return await _channel?.invokeMethod("currentPlaybackTime");
   }
 
+  ///获取视频总进度
   Future<bool> get duration async {
     if (_isNeedDisposed) return false;
 
@@ -243,6 +246,7 @@ class VodPlayerController extends ChangeNotifier
     return await _channel?.invokeMethod("duration");
   }
 
+  ///获取可播放进度
   Future<bool> get playableDuration async {
     if (_isNeedDisposed) return false;
 
@@ -354,6 +358,8 @@ class VodPlayerController extends ChangeNotifier
     _isNeedDisposed = true;
 
     if (!_isDisposed) {
+      stop();
+
       await _eventSubScription?.cancel();
       _eventSubScription = null;
 

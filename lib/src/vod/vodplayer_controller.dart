@@ -116,6 +116,142 @@ class VodPlayerController extends ChangeNotifier
   }
 
   ///
+  /// 停止播放
+  ///
+  Future<bool> stop() async {
+    if (_isNeedDisposed) return false;
+
+    await _initPlayer.future;
+
+    final result = await _channel?.invokeMethod("stop");
+    _updateState(result == 0 ? PlayerState.stopped : _state!);
+    return result == 0;
+  }
+
+  ///
+  /// 暂停播放
+  ///
+  Future<void> pause() async {
+    if (_isNeedDisposed) return;
+
+    await _initPlayer.future;
+
+    await _channel?.invokeMethod("pause");
+    _updateState(PlayerState.paused);
+  }
+
+  ///
+  /// 继续播放
+  ///
+  Future<void> resume() async {
+    if (_isNeedDisposed) return;
+
+    await _initPlayer.future;
+
+    await _channel?.invokeMethod("resume");
+  }
+
+  ///
+  ///  跳转到某个时间点
+  ///
+  Future<void> seek(double time) async {
+    if (_isNeedDisposed) return;
+
+    await _initPlayer.future;
+
+    await _channel?.invokeMethod("seek", {"time": time});
+  }
+
+  ///
+  /// 设置静音
+  ///
+  Future<void> setMute(bool enable) async {
+    if (_isNeedDisposed) return;
+
+    await _initPlayer.future;
+
+    await _channel?.invokeMethod("setMute", {"enable": enable});
+  }
+
+  /// 设置音量大小
+  /// @param volume 音量大小。范围：0 ~ 100。
+  Future<void> setAudioPlaybackVolume(int volume) async {
+    if (_isNeedDisposed) return;
+
+    await _initPlayer.future;
+
+    await _channel?.invokeMethod("setAudioPlaybackVolume", {"volume": volume});
+  }
+
+  /// 设置播放速率
+  /// @param rate 正常速度为1.0；小于为慢速；大于为快速。最大建议不超过2.0
+  Future<void> setRate(double rate) async {
+    if (_isNeedDisposed) return;
+
+    await _initPlayer.future;
+
+    await _channel?.invokeMethod("setRate", {"rate": rate});
+  }
+
+  /// 设置画面镜像
+  ///
+  Future<void> setMirror(bool mirror) async {
+    if (_isNeedDisposed) return;
+
+    await _initPlayer.future;
+
+    await _channel?.invokeMethod("setMirror", {"mirror": mirror});
+  }
+
+  ///
+  /// 设置画面旋转
+  /// homeOrientaionRight, //< HOME 键在右边，横屏模式
+  ///   homeOrientationDown, //< HOME 键在下面，手机直播中最常见的竖屏直播模式
+  ///   homeOrientationLeft, //< HOME 键在左边，横屏模式
+  ///   homeOrientationUp, //< HOME 键在上边，竖屏直播（适合小米 MIX2）
+  ///
+  Future<void> setRenderRotation(RenderRotation rotaion) async {
+    if (_isNeedDisposed) return;
+
+    await _initPlayer.future;
+
+    await _channel
+        ?.invokeMethod("setRenderRotation", {"rotaion": rotaion.index});
+  }
+
+  Future<bool> get isPlaying async {
+    if (_isNeedDisposed) return false;
+
+    await _initPlayer.future;
+
+    return await _channel?.invokeMethod("isPlaying");
+  }
+
+  Future<bool> get currentPlaybackTime async {
+    if (_isNeedDisposed) return false;
+
+    await _initPlayer.future;
+
+    return await _channel?.invokeMethod("currentPlaybackTime");
+  }
+
+  Future<bool> get duration async {
+    if (_isNeedDisposed) return false;
+
+    await _initPlayer.future;
+
+    return await _channel?.invokeMethod("duration");
+  }
+
+  Future<bool> get playableDuration async {
+    if (_isNeedDisposed) return false;
+
+    await _initPlayer.future;
+
+    return await _channel?.invokeMethod("playableDuration");
+  }
+
+  ///
   /// 播放器事件
   /// event 类型
   /// see:https://cloud.tencent.com/document/product/454/7886#.E6.92.AD.E6.94.BE.E4.BA.8B.E4.BB.B6

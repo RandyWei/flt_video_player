@@ -5,7 +5,7 @@
 class PlayerValue {
   final PlayerState state;
 
-  PlayerValue.uninitialized() :this(state: PlayerState.stopped);
+  PlayerValue.uninitialized() : this(state: PlayerState.stopped);
 
   PlayerValue({required this.state});
 
@@ -21,4 +21,11 @@ enum PlayerState {
   playing, // 播放中
   stopped, // 停止播放
   disposed // 控件释放了
+}
+
+enum RenderRotation {
+  homeOrientaionRight, //< HOME 键在右边，横屏模式
+  homeOrientationDown, //< HOME 键在下面，手机直播中最常见的竖屏直播模式
+  homeOrientationLeft, //< HOME 键在左边，横屏模式
+  homeOrientationUp, //< HOME 键在上边，竖屏直播（适合小米 MIX2）
 }

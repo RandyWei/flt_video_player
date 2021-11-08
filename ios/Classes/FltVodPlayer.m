@@ -124,14 +124,15 @@ static const int uninitialized = -1;
 ///
 ///创建播放器
 ///
-- (NSNumber*)createVodPlayer:(BOOL)onlyAudio{
+- (NSNumber*)createVodPlayer:(BOOL)onlyAudio config:(TXVodPlayConfig*) config{
     if (_vodPlayer == nil) {
         _vodPlayer = [TXVodPlayer new];
+        _vodPlayer.config = config;
         _vodPlayer.vodDelegate = self;
+        _vodPlayer.enableHWAcceleration = YES;
         [self setupPlayer:onlyAudio];
     }
     
-    NSLog(@"createVodPlayer_vodPlayer:%@",_vodPlayer);
     return [NSNumber numberWithLongLong:_textureId];
 }
 
@@ -145,7 +146,6 @@ static const int uninitialized = -1;
         _textureId = tId;
     }
     
-    NSLog(@"setupPlayer_vodPlayer:%@",_vodPlayer);
     if (_vodPlayer != nil) {
         [_vodPlayer setVideoProcessDelegate:self];
         _vodPlayer.enableHWAcceleration = YES;
@@ -197,7 +197,45 @@ static const int uninitialized = -1;
     NSDictionary *args = call.arguments; //读取参数
     if ([@"init" isEqualToString:call.method]) {
         BOOL onlyAudio = [args[@"onlyAudio"] boolValue];
-        NSNumber *textureId = [self createVodPlayer:onlyAudio];
+        
+        //读取 config
+        
+        NSDictionary *configMap = args[@"config"];
+        
+        TXVodPlayConfig *playerConfig = [[TXVodPlayConfig alloc]init];
+        playerConfig.connectRetryCount = [configMap[@"connectRetryCount"] intValue];
+        playerConfig.connectRetryInterval = [configMap[@"connectRetryInterval"] intValue];
+        playerConfig.timeout = [configMap[@"timeout"] intValue];
+        playerConfig.keepLastFrameWhenStop = [configMap[@"keepLastFrameWhenStop"] boolValue];
+        playerConfig.firstStartPlayBufferTime = [configMap[@"firstStartPlayBufferTime"] intValue];
+        playerConfig.nextStartPlayBufferTime = [configMap[@"nextStartPlayBufferTime"] intValue];
+        
+        NSString *cacheFolderPath = [configMap[@"cacheFolderPath"] stringValue];
+        if (cacheFolderPath != nil && cacheFolderPath.length > 0) {
+            playerConfig.cacheFolderPath = cacheFolderPath;
+        }
+        
+        playerConfig.maxCacheItems = [configMap[@"maxCacheItems"] intValue];
+        playerConfig.headers = configMap[@"headers"];
+        
+        playerConfig.enableAccurateSeek = [configMap[@"enableAccurateSeek"] boolValue];
+        playerConfig.progressInterval = [configMap[@"progressInterval"] doubleValue];
+        playerConfig.maxBufferSize = [configMap[@"maxBufferSize"] intValue];
+        
+        NSString *overlayKey = [configMap[@"overlayKey"] stringValue];
+        
+        if (overlayKey != nil && overlayKey.length > 0) {
+            playerConfig.overlayKey = overlayKey;
+        }
+        
+        NSString *overlayIv = [configMap[@"overlayIv"] stringValue];
+        
+        if (overlayIv != nil && overlayIv.length > 0) {
+            playerConfig.overlayIv = overlayIv;
+        }
+        
+        
+        NSNumber *textureId = [self createVodPlayer:onlyAudio config:playerConfig];
         result(textureId);
     } else if ([@"play" isEqualToString:call.method]) {
         NSString *url = args[@"url"];

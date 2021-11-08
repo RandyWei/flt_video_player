@@ -3,6 +3,7 @@
 ///
 ///
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
@@ -17,8 +18,9 @@ class Plugin {
     return version;
   }
 
-  static Future<int> createVodPlayer() async {
-    return await _channel.invokeMethod('createVodPlayer');
+  static Future<int> createVodPlayer(Map<String, dynamic> configJson) async {
+    return await _channel
+        .invokeMethod('createVodPlayer', {"config": configJson});
   }
 
   static Future<int> releasePlayer(int playerId) async {

@@ -21,7 +21,11 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    controller = VodPlayerController();
+
+    var playerConfig = PlayerConfig();
+    playerConfig.headers = {"Referer": "https://videoadmin.chinahrt.com"};
+
+    controller = VodPlayerController(config: playerConfig);
     controller.initialize();
   }
 
@@ -40,9 +44,14 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(onPressed: (){
-          controller.play("https://look.chinahrt.com.cn/courseyun/rxsl2content/transcode/20211/be3b6935-f678-4303-a1f8-b2a006352656/283006-mp4.mp4");
-        },),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            //https://hwonline.oss-cn-beijing.aliyuncs.com/course/浅谈医德医风建设.mp4
+            //https://look.chinahrt.com.cn/courseyun/rxsl2content/transcode/20211/be3b6935-f678-4303-a1f8-b2a006352656/283006-mp4.mp4
+            controller.play(
+                "https://hwonline.oss-cn-beijing.aliyuncs.com/course/浅谈医德医风建设.mp4");
+          },
+        ),
       ),
     );
   }

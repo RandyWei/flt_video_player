@@ -4,13 +4,15 @@ import 'package:flt_video_player/flt_video_player.dart';
 import 'package:flt_video_player/src/plugin.dart';
 import 'package:flt_video_player/src/vod/player_define.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 ///
 /// Created by wei on 2021/11/5.<br/>
 ///
 
-class VodPlayerController extends ChangeNotifier {
+class VodPlayerController extends ChangeNotifier
+    implements ValueListenable<PlayerValue> {
   int _playerId = -1; //播放器 id
 
   //播放器调用通道
@@ -22,7 +24,7 @@ class VodPlayerController extends ChangeNotifier {
   bool _isDisposed = false;
   bool _isNeedDisposed = false;
 
-  PlayerValue? _value;
+  late PlayerValue _value;
   PlayerState? _state;
 
   //播放事件广播器
@@ -48,11 +50,13 @@ class VodPlayerController extends ChangeNotifier {
 
   Stream<PlayerState> get playState => _stateStreamController.stream;
 
-  VodPlayerController()
+  PlayerConfig? config;
+
+  VodPlayerController({this.config})
       : _initPlayer = Completer(),
         _createTexture = Completer() {
     _value = PlayerValue.uninitialized();
-    _state = _value?.state;
+    _state = _value.state;
     _create();
   }
 
@@ -64,7 +68,9 @@ class VodPlayerController extends ChangeNotifier {
   /// 创建播放器
   ///
   Future<void> _create() async {
-    _playerId = await Plugin.createVodPlayer();
+    var configJson = config?.toJson() ?? {};
+
+    _playerId = await Plugin.createVodPlayer(configJson);
     //每一个播放器对象创建独立的通信通道
     _channel =
         MethodChannel("${Plugin.methodChannelPrefix}/vodplayer/$_playerId");
@@ -93,6 +99,7 @@ class VodPlayerController extends ChangeNotifier {
     final textureId = await _channel?.invokeMethod("init");
 
     _createTexture.complete(textureId);
+    _updateState(PlayerState.paused);
   }
 
   ///
@@ -179,21 +186,28 @@ class VodPlayerController extends ChangeNotifier {
     _netStreamController.add(map);
   }
 
+  ///
+  /// 更新播放器状态
+  ///
   void _updateState(PlayerState playerState) {
-    value = _value?.copyWith(state: playerState);
-    _state = value?.state;
+    value = _value.copyWith(state: playerState);
+    _state = value.state;
     if (_state == null) return;
     _stateStreamController.add(_state!);
   }
 
+  ///
+  /// 释放播放器
+  ///
   Future<void> _release() async {
     await _initPlayer.future;
     await Plugin.releasePlayer(_playerId);
   }
 
-  PlayerValue? get value => _value;
+  @override
+  PlayerValue get value => _value;
 
-  set value(PlayerValue? value) {
+  set value(PlayerValue value) {
     if (_value == _value) return;
     _value = _value;
     notifyListeners();
@@ -206,6 +220,9 @@ class VodPlayerController extends ChangeNotifier {
     if (!_isDisposed) {
       await _eventSubScription?.cancel();
       _eventSubScription = null;
+
+      await _netSubScription?.cancel();
+      _netSubScription = null;
 
       await _release();
 

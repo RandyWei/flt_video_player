@@ -1,15 +1,34 @@
 # flt_video_player
 
-A new Flutter project.
+基于腾讯云原生播放器封装的 Flutter 版本。
+使用本播放器前建议查看腾讯云[官方文档](https://cloud.tencent.com/document/product/881/20191)
 
-## Getting Started
+## 安装
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+```puml
+//import
+dependencies:
+flt_video_player:
+git:
+url: git://github.com/RandyWei/flt_video_player.git
+```
+## Android
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+在 app/build.gradle 的 defaultConfig 中添加配置
+```
+ndk {
+       abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
+   }
+```
+在 android/app/src/main/AndroidManifest.xml 中增加如下配置
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    ...
+    >
 
+    <application
+        tools:replace="android:label">
+    ...
+    </application>
+```

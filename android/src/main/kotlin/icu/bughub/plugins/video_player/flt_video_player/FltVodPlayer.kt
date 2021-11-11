@@ -225,7 +225,7 @@ class FltVodPlayer(private val flutterPluginBinding: FlutterPlugin.FlutterPlugin
             }
 
             "seek" -> {
-                val time = call.argument<Float>("time")
+                val time = call.argument<Int>("time")
                 if (time != null) {
                     vodPlayer?.seek(time)
                 }
@@ -255,7 +255,7 @@ class FltVodPlayer(private val flutterPluginBinding: FlutterPlugin.FlutterPlugin
             }
 
             "setRate" -> {
-                val rate = (call.argument<Float>("rate") ?: 1.0) as Float
+                val rate = (call.argument<Double>("rate") ?: 1.0).toFloat()
                 vodPlayer?.setRate(rate)
                 result.success(null)
             }

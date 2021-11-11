@@ -348,7 +348,7 @@ static const int uninitialized = -1;
         [self resume];
         result(nil);
     } else if ([@"seek" isEqualToString:call.method]){
-        float time = [args[@"time"] floatValue];
+        float time = [args[@"time"] intValue];
         BOOL r = [self seek:time];
         result([NSNumber numberWithBool:r]);
     } else if([@"currentPlaybackTime" isEqualToString:call.method]){

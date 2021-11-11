@@ -99,7 +99,7 @@ class VodPlayerController extends ChangeNotifier
     final textureId = await _channel?.invokeMethod("init");
 
     _createTexture.complete(textureId);
-    _updateState(PlayerState.paused);
+    _updateState(PlayerState.stopped);
   }
 
   ///
@@ -149,12 +149,13 @@ class VodPlayerController extends ChangeNotifier
     await _initPlayer.future;
 
     await _channel?.invokeMethod("resume");
+    _updateState(PlayerState.buffering);
   }
 
   ///
   ///  跳转到某个时间点
   ///
-  Future<void> seek(double time) async {
+  Future<void> seek(int time) async {
     if (_isNeedDisposed) return;
 
     await _initPlayer.future;
@@ -229,8 +230,8 @@ class VodPlayerController extends ChangeNotifier
   }
 
   ///当前播放进度
-  Future<bool> get currentPlaybackTime async {
-    if (_isNeedDisposed) return false;
+  Future<double> get currentPlaybackTime async {
+    if (_isNeedDisposed) return 0;
 
     await _initPlayer.future;
 
@@ -238,8 +239,8 @@ class VodPlayerController extends ChangeNotifier
   }
 
   ///获取视频总进度
-  Future<bool> get duration async {
-    if (_isNeedDisposed) return false;
+  Future<double> get duration async {
+    if (_isNeedDisposed) return 0;
 
     await _initPlayer.future;
 
@@ -247,8 +248,8 @@ class VodPlayerController extends ChangeNotifier
   }
 
   ///获取可播放进度
-  Future<bool> get playableDuration async {
-    if (_isNeedDisposed) return false;
+  Future<double> get playableDuration async {
+    if (_isNeedDisposed) return 0;
 
     await _initPlayer.future;
 
@@ -264,7 +265,7 @@ class VodPlayerController extends ChangeNotifier
     if (event == null) return;
 
     final Map<dynamic, dynamic> map = event;
-
+    debugPrint("_eventHandler:${map["event"]}");
     switch (map["event"]) {
       case 2002:
         break;
@@ -332,6 +333,7 @@ class VodPlayerController extends ChangeNotifier
   void _updateState(PlayerState playerState) {
     value = _value.copyWith(state: playerState);
     _state = value.state;
+    debugPrint("_updateState:$_state");
     if (_state == null) return;
     _stateStreamController.add(_state!);
   }
@@ -348,8 +350,8 @@ class VodPlayerController extends ChangeNotifier
   PlayerValue get value => _value;
 
   set value(PlayerValue value) {
-    if (_value == _value) return;
-    _value = _value;
+    if (_value == value) return;
+    _value = value;
     notifyListeners();
   }
 

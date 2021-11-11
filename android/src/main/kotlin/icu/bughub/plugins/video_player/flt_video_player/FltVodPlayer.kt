@@ -11,6 +11,8 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.view.TextureRegistry
+import kotlin.math.max
+import kotlin.math.min
 
 class FltVodPlayer(private val flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) :
     FltBasePlayer(), MethodChannel.MethodCallHandler, ITXVodPlayListener {
@@ -70,7 +72,7 @@ class FltVodPlayer(private val flutterPluginBinding: FlutterPlugin.FlutterPlugin
 
     override fun destory() {
 
-        vodPlayer?.stopPlay(true)
+        stopPlay(false)
         vodPlayer = null
 
 
@@ -128,6 +130,12 @@ class FltVodPlayer(private val flutterPluginBinding: FlutterPlugin.FlutterPlugin
     private fun startPlay(url: String): Int {
         return vodPlayer?.startPlay(url) ?: uninitialized
     }
+
+
+    private fun stopPlay(isNeedClearLastImg: Boolean): Int? {
+        return vodPlayer?.stopPlay(isNeedClearLastImg)
+    }
+
 
     private fun getParams(event: Int, bundle: Bundle?): Map<String, Any?> {
         val param = HashMap<String, Any?>()
@@ -195,7 +203,80 @@ class FltVodPlayer(private val flutterPluginBinding: FlutterPlugin.FlutterPlugin
                 }
             }
 
+            "stop" -> {
+                val isNeedClearLastImg = call.argument<Boolean>("isNeedClearLastImg") ?: false
+                val r: Int? = stopPlay(isNeedClearLastImg)
+                result.success(r)
+            }
 
+
+            "isPlaying" -> {
+                result.success(vodPlayer?.isPlaying ?: false)
+            }
+
+            "pause" -> {
+                vodPlayer?.pause()
+                result.success(null)
+            }
+
+            "resume" -> {
+                vodPlayer?.resume()
+                result.success(null)
+            }
+
+            "seek" -> {
+                val time = call.argument<Float>("time")
+                if (time != null) {
+                    vodPlayer?.seek(time)
+                }
+                result.success(null)
+            }
+
+            "currentPlaybackTime" -> {
+                result.success(vodPlayer?.currentPlaybackTime)
+            }
+
+            "duration" -> result.success(vodPlayer?.duration)
+
+            "playableDuration" -> result.success(vodPlayer?.playableDuration)
+
+            "setMute" -> {
+                val enable = call.argument<Boolean>("enable") ?: false
+                vodPlayer?.setMute(enable)
+                result.success(null)
+            }
+
+            "setAudioPlayoutVolume" -> {
+                var volume = call.argument<Int>("volume") ?: 0
+                volume = max(0, volume)
+                volume = min(100, volume)
+                vodPlayer?.setAudioPlayoutVolume(volume)
+                result.success(null)
+            }
+
+            "setRate" -> {
+                val rate = (call.argument<Float>("rate") ?: 1.0) as Float
+                vodPlayer?.setRate(rate)
+                result.success(null)
+            }
+
+            "setMirror" -> {
+                val mirror = call.argument<Boolean>("mirror") ?: false
+                vodPlayer?.setMirror(mirror)
+                result.success(null)
+            }
+
+            "setLoop" -> {
+                val loop = call.argument<Boolean>("loop") ?: false
+                vodPlayer?.isLoop = loop
+                result.success(null)
+            }
+
+            "setRenderRotation" -> {
+                val rotation = call.argument<Int>("rotation") ?: 1
+                vodPlayer?.setRenderRotation(rotation)
+                result.success(null)
+            }
         }
     }
 

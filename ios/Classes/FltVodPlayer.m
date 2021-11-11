@@ -363,16 +363,12 @@ static const int uninitialized = -1;
         result(nil);
     } else if([@"setAudioPlayoutVolume" isEqualToString:call.method]){
         int volume = [args[@"volume"] intValue];
-        if (volume < 0) {
-            volume = 0;
-        }
-        if (volume > 100) {
-            volume = 100;
-        }
+        volume = MAX(0, volume);
+        volume = MIN(100, volume);
         [self setAudioPlayoutVolume:volume];
         result(nil);
     } else if ([@"setRate" isEqualToString:call.method]){
-        int rate = [args[@"rate"] intValue];
+        int rate = [args[@"rate"] floatValue];
         [self setRate:rate];
         result(nil);
     } else if([@"setMirror" isEqualToString:call.method]){

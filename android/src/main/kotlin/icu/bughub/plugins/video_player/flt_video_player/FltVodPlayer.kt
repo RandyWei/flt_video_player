@@ -4,6 +4,7 @@ import android.graphics.SurfaceTexture
 import android.os.Bundle
 import android.view.Surface
 import com.tencent.rtmp.ITXVodPlayListener
+import com.tencent.rtmp.TXVodPlayConfig
 import com.tencent.rtmp.TXVodPlayer
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.EventChannel
@@ -100,11 +101,10 @@ class FltVodPlayer(private val flutterPluginBinding: FlutterPlugin.FlutterPlugin
      *
      * @return texture id
      */
-    private fun initPlayer(): Long {
+    private fun initPlayer(playConfig: TXVodPlayConfig): Long {
         if (vodPlayer == null) {
             vodPlayer = TXVodPlayer(flutterPluginBinding.applicationContext)
-            vodPlayer?.setVodListener(this)
-            setupPlayer()
+            setupPlayer(playConfig)
         }
         return surfaceTextureEntry?.id() ?: -1
     }
@@ -113,11 +113,13 @@ class FltVodPlayer(private val flutterPluginBinding: FlutterPlugin.FlutterPlugin
      * 配置播放器
      *
      */
-    private fun setupPlayer() {
+    private fun setupPlayer(playConfig: TXVodPlayConfig) {
         surfaceTextureEntry = flutterPluginBinding.textureRegistry.createSurfaceTexture()
         surfaceTexture = surfaceTextureEntry?.surfaceTexture()
         surface = Surface(surfaceTexture)
 
+
+        vodPlayer?.setConfig(playConfig)
         vodPlayer?.setSurface(surface)
         vodPlayer?.enableHardwareDecode(true)
         vodPlayer?.setVodListener(this)
@@ -149,7 +151,37 @@ class FltVodPlayer(private val flutterPluginBinding: FlutterPlugin.FlutterPlugin
 
         when (call.method) {
             "init" -> {
-                val id = initPlayer()
+
+                val playConfig = TXVodPlayConfig()
+
+                playConfig.setConnectRetryCount(call.argument<Int>("connectRetryCount") ?: 3)
+                playConfig.setConnectRetryInterval(call.argument<Int>("connectRetryInterval") ?: 3)
+                playConfig.setTimeout(call.argument<Int>("timeout") ?: 10)
+                playConfig.setFirstStartPlayBufferTime(
+                    call.argument<Int>("firstStartPlayBufferTime") ?: 100
+                )
+                playConfig.setNextStartPlayBufferTime(
+                    call.argument<Int>("nextStartPlayBufferTime") ?: 250
+                )
+
+                playConfig.setCacheFolderPath(call.argument("cacheFolderPath"))
+                playConfig.setMaxCacheItems(call.argument<Int>("maxCacheItems") ?: 0)
+                playConfig.setHeaders(call.argument("headers"))
+                //< 是否精确 seek，默认YES。开启精确后seek，seek 的时间平均多出200ms
+                playConfig.setEnableAccurateSeek(
+                    call.argument<Boolean>("enableAccurateSeek") ?: false
+                )
+                playConfig.setProgressInterval(
+                    (call.argument<Double>("progressInterval")?.toInt() ?: 0)
+                )
+
+                playConfig.setMaxBufferSize(call.argument<Int>("maxBufferSize") ?: 0)
+
+                playConfig.setOverlayKey(call.argument("overlayKey"))
+                playConfig.setOverlayIv(call.argument("overlayIv"))
+
+
+                val id = initPlayer(playConfig)
                 result.success(id)
             }
 

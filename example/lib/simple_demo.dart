@@ -67,11 +67,12 @@ class _SimpleDemoState extends State<SimpleDemo> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //https://hwonline.oss-cn-beijing.aliyuncs.com/course/浅谈医德医风建设.mp4
+          //https://closs.jumingedu.com/20210930/%E5%B8%B8%E8%A7%81%E5%BF%83%E5%BE%8B%E5%A4%B1%E5%B8%B8%E7%9A%84%E8%AF%8A%E6%B2%BB%E5%8E%9F%E5%88%99/%E5%B8%B8%E8%A7%81%E5%BF%83%E5%BE%8B%E5%A4%B1%E5%B8%B8%E7%9A%84%E8%AF%8A%E6%B2%BB%E5%8E%9F%E5%88%99.m3u8
           //https://look.chinahrt.com.cn/courseyun/rxsl2content/transcode/20211/be3b6935-f678-4303-a1f8-b2a006352656/283006-mp4.mp4
           //https://video.qiantucdn.com/58pic/00/20/21/09v58PICJQgaWdcC58PICSUbK.mp4?e=1636441061&token=OyzEe_0O8H433pm7zVEjtnSy5dVdfpsIawO2nx3f:eHu6r0m7_zdDEj-L6lTqq_6OYPs=
           //https://stream7.iqilu.com/10339/article/202002/18/2fca1c77730e54c7b500573c2437003f.mp4
           controller.play(
-              "https://stream7.iqilu.com/10339/article/202002/18/2fca1c77730e54c7b500573c2437003f.mp4");
+              "https://closs.jumingedu.com/20210930/%E5%B8%B8%E8%A7%81%E5%BF%83%E5%BE%8B%E5%A4%B1%E5%B8%B8%E7%9A%84%E8%AF%8A%E6%B2%BB%E5%8E%9F%E5%88%99/%E5%B8%B8%E8%A7%81%E5%BF%83%E5%BE%8B%E5%A4%B1%E5%B8%B8%E7%9A%84%E8%AF%8A%E6%B2%BB%E5%8E%9F%E5%88%99.m3u8");
         },
       ),
     );

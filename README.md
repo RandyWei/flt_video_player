@@ -5,20 +5,20 @@
 
 ## 安装
 
-```puml
+```yaml
 //import
 dependencies:
-flt_video_player:
-git:
-url: git://github.com/RandyWei/flt_video_player.git
+  flt_video_player:
+    git:
+      url: git://github.com/RandyWei/flt_video_player.git
 ```
 ## Android
 
 在 app/build.gradle 的 defaultConfig 中添加配置
-```
+```groovy
 ndk {
-       abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
-   }
+    abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
+}
 ```
 在 android/app/src/main/AndroidManifest.xml 中增加如下配置
 ```xml
@@ -26,9 +26,11 @@ ndk {
     xmlns:tools="http://schemas.android.com/tools"
     ...
     >
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         tools:replace="android:label">
     ...
     </application>
+    ...
+<manifest
 ```

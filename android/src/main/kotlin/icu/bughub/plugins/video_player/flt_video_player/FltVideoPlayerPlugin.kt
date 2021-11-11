@@ -42,6 +42,11 @@ class FltVideoPlayerPlugin : FlutterPlugin, MethodCallHandler {
             val playerId = vodPlayer?.getPlayerId() ?: -1
             players.append(playerId, vodPlayer)
             result.success(playerId)
+        } else if (call.method == "releaseVodPlayer") {
+            val playerId = call.argument<Int>("playerId") ?: -1
+            val player = players[playerId]
+            player.destory()
+            players.remove(playerId)
         } else {
             result.notImplemented()
         }

@@ -34,3 +34,83 @@ ndk {
     ...
 <manifest
 ```
+
+## Example
+
+```dart
+
+class SimpleDemo extends StatefulWidget {
+  const SimpleDemo({Key? key}) : super(key: key);
+
+  @override
+  _SimpleDemoState createState() => _SimpleDemoState();
+}
+
+class _SimpleDemoState extends State<SimpleDemo> {
+  late VodPlayerController controller;
+  double _aspectRation = 16 / 9;
+
+  @override
+  void initState() {
+    super.initState();
+
+    var playerConfig = PlayerConfig();
+
+    controller = VodPlayerController(config: playerConfig);
+
+    //监听播放状态
+    controller.playState.listen((event) {
+      debugPrint("playerState:$event");
+    });
+
+    controller.onPlayerEvent.listen((event) {
+      debugPrint("PlayerEvent:$event");
+    });
+
+    controller.onNetEvent.listen((event) {
+      //获取视频宽度高度
+      double w = (event["VIDEO_WIDTH"]).toDouble();
+      double h = (event["VIDEO_HEIGHT"]).toDouble();
+
+      //计算比例
+      if (w > 0 && h > 0) {
+        _aspectRation = 1.0 * w / h;
+        setState(() {});
+      }
+    });
+
+    controller.initialize();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Plugin example app'),
+      ),
+      body: Center(
+        child: AspectRatio(
+          aspectRatio: _aspectRation,
+          child: VodPlayer(
+            controller: controller,
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          controller.play(
+              "https://stream7.iqilu.com/10339/article/202002/18/2fca1c77730e54c7b500573c2437003f.mp4");
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+}
+```
+
+更多示例，可以查看 example 示例

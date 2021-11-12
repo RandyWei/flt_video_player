@@ -3,11 +3,14 @@ PODS:
     - Flutter
     - TXLiteAVSDK_Player
   - Flutter (1.0.0)
+  - orientation (0.0.1):
+    - Flutter
   - TXLiteAVSDK_Player (9.2.10637)
 
 DEPENDENCIES:
   - flt_video_player (from `.symlinks/plugins/flt_video_player/ios`)
   - Flutter (from `Flutter`)
+  - orientation (from `.symlinks/plugins/orientation/ios`)
 
 SPEC REPOS:
   trunk:
@@ -18,10 +21,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flt_video_player/ios"
   Flutter:
     :path: Flutter
+  orientation:
+    :path: ".symlinks/plugins/orientation/ios"
 
 SPEC CHECKSUMS:
   flt_video_player: 8f968326f036f68e465d8258ae9c7f507fa3fcce
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  orientation: 6c9203efe86ce4cff379756910f18b2d745628c3
   TXLiteAVSDK_Player: 300e6fc7262ae095ee13b18d7d821c5fae0996f9
 
 PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d

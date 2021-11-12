@@ -30,19 +30,17 @@ class FullPlayer extends StatefulWidget {
 class _FullPlayerState extends State<FullPlayer> {
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: widget.aspectRatio,
-      child: Stack(
-        children: [
-          VodPlayer(controller: widget.controller),
-          ControlOverlay(
-            controller: widget.controller,
-            callPlay: widget.playCall,
-            coverUrl: widget.coverUrl,
-            title: widget.title,
-          )
-        ],
-      ),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        VodPlayer(controller: widget.controller),
+        ControlOverlay(
+          controller: widget.controller,
+          callPlay: widget.playCall,
+          coverUrl: widget.coverUrl,
+          title: widget.title,
+        )
+      ],
     );
   }
 }

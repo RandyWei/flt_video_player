@@ -47,29 +47,45 @@ class _FullPlayerDemoState extends State<FullPlayerDemo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Full Player Demo"),
-      ),
-      body: Column(
-        children: [
-          FullPlayer(
-            playCall: () {
-              if (controller.value.state == PlayerState.stopped) {
-                controller.play(
-                    "https://look.chinahrt.com.cn/courseyun/rxsl2content/transcode/20211/be3b6935-f678-4303-a1f8-b2a006352656/283006-mp4.mp4");
-              } else {
-                controller.resume();
-              }
-            },
-            controller: controller,
-            aspectRatio: _aspectRation,
-            title: "测试视频",
-            coverUrl:
-                "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2F1114%2F060421091316%2F210604091316-6-1200.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1639190767&t=831d19c414f872da0b3cf565b3019bfd",
-          )
-        ],
-      ),
+    return OrientationBuilder(builder: (context, orientation) {
+      return Scaffold(
+        appBar: orientation == Orientation.portrait
+            ? AppBar(
+                title: const Text("Full Player Demo"),
+              )
+            : null,
+        body: orientation == Orientation.portrait
+            ? Column(
+                children: [
+                  AspectRatio(
+                    aspectRatio: _aspectRation,
+                    child: buildFullPlayer(),
+                  )
+                ],
+              )
+            : Container(
+                constraints: const BoxConstraints.expand(),
+                child: buildFullPlayer(),
+              ),
+      );
+    });
+  }
+
+  FullPlayer buildFullPlayer() {
+    return FullPlayer(
+      playCall: () {
+        if (controller.value.state == PlayerState.stopped) {
+          controller.play(
+              "https://look.chinahrt.com.cn/courseyun/rxsl2content/transcode/20211/be3b6935-f678-4303-a1f8-b2a006352656/283006-mp4.mp4");
+        } else {
+          controller.resume();
+        }
+      },
+      controller: controller,
+      aspectRatio: _aspectRation,
+      title: "测试视频",
+      coverUrl:
+          "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2F1114%2F060421091316%2F210604091316-6-1200.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1639190767&t=831d19c414f872da0b3cf565b3019bfd",
     );
   }
 

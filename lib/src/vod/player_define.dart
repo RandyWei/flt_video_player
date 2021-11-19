@@ -29,3 +29,11 @@ enum RenderRotation {
   homeOrientationLeft, //< HOME 键在左边，横屏模式
   homeOrientationUp, //< HOME 键在上边，竖屏直播（适合小米 MIX2）
 }
+
+///
+/// 渲染糊弄
+///
+enum RenderType {
+  texture, //外接纹理
+  platformView
+}

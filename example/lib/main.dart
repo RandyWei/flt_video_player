@@ -1,4 +1,5 @@
 import 'package:flt_video_player_example/full/full_player_demo.dart';
+import 'package:flt_video_player_example/platform_view_demo.dart';
 import 'package:flt_video_player_example/simple_demo.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -60,6 +61,14 @@ class _HomePageState extends State<HomePage> {
                   }));
                 },
                 child: const Text("完整示例")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return const PlatformViewDemo();
+                  }));
+                },
+                child: const Text("Platform View 示例")),
           ],
         ),
       ),

@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flt_video_player'
-  s.version          = '0.0.1'
+  s.version          = '1.0.0'
   s.summary          = 'A Video Player Flutter plugin based on TXVodPlayer'
   s.description      = <<-DESC
 A Video Player Flutter plugin based on TXVodPlayer

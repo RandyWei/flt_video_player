@@ -52,12 +52,16 @@ class VodPlayerController extends ChangeNotifier
 
   PlayerConfig? config;
 
-  VodPlayerController({this.config})
+  RenderType? renderType;
+
+  VodPlayerController({this.config, this.renderType = RenderType.texture})
       : _initPlayer = Completer(),
         _createTexture = Completer() {
     _value = PlayerValue.uninitialized();
     _state = _value.state;
-    _create();
+    if (renderType == RenderType.texture) {
+      _create();
+    }
   }
 
   Future<int> get textureId async {
@@ -69,8 +73,11 @@ class VodPlayerController extends ChangeNotifier
   ///
   Future<void> _create() async {
     var configJson = config?.toJson() ?? {};
-
     _playerId = await Plugin.createVodPlayer(configJson);
+    _initChannel();
+  }
+
+  void _initChannel() {
     //每一个播放器对象创建独立的通信通道
     _channel =
         MethodChannel("${Plugin.methodChannelPrefix}/vodplayer/$_playerId");
@@ -88,6 +95,15 @@ class VodPlayerController extends ChangeNotifier
   }
 
   ///
+  /// PlatformView 初始化完成回调
+  ///
+  void onPlatformViewCreated(int id) {
+    debugPrint("onPlatformViewCreated:$id");
+    _playerId = id;
+    _initChannel();
+  }
+
+  ///
   /// 初始化
   ///
   Future<void> initialize() async {
@@ -95,6 +111,7 @@ class VodPlayerController extends ChangeNotifier
 
     await _initPlayer.future; //等待初始化完成
 
+    debugPrint("initialize");
     //通过初始化得到 Texture id，不等同 palyer id
     final textureId = await _channel?.invokeMethod("init");
 
@@ -357,6 +374,7 @@ class VodPlayerController extends ChangeNotifier
 
   @override
   void dispose() async {
+
     _isNeedDisposed = true;
 
     if (!_isDisposed) {

@@ -2,7 +2,9 @@
 /// Created by wei on 2021/11/5.<br/>
 ///
 ///
+import 'package:flt_video_player/src/vod/player_define.dart';
 import 'package:flt_video_player/src/vod/vodplayer_controller.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class VodPlayer extends StatefulWidget {
@@ -21,15 +23,23 @@ class _VodPlayerState extends State<VodPlayer> {
   void initState() {
     super.initState();
 
-    widget.controller.textureId.then((value) {
-      setState(() {
-        _textureId = value;
+    if (widget.controller.renderType == RenderType.texture) {
+      widget.controller.textureId.then((value) {
+        setState(() {
+          _textureId = value;
+        });
       });
-    });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return _textureId == -1 ? Container() : Texture(textureId: _textureId);
+    return widget.controller.renderType == RenderType.texture
+        ? (_textureId == -1 ? Container() : Texture(textureId: _textureId))
+        : UiKitView(
+            viewType: "FltVideoView",
+            creationParamsCodec: const StandardMessageCodec(),
+            onPlatformViewCreated: widget.controller.onPlatformViewCreated,
+          );
   }
 }

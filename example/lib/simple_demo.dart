@@ -25,7 +25,7 @@ class _SimpleDemoState extends State<SimpleDemo> {
     playerConfig.headers = {"Referer": "https://videoadmin.chinahrt.com"};
 
     controller = VodPlayerController(
-        config: playerConfig, renderType: RenderType.platformView);
+        config: playerConfig);
 
     //监听播放状态
     controller.playState.listen((event) {

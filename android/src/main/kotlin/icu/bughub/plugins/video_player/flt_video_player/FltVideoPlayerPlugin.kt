@@ -5,13 +5,15 @@ import androidx.annotation.NonNull
 import icu.bughub.plugins.video_player.flt_video_player.Constants.CHANNEL_PREFIX
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
 /** FltVideoPlayerPlugin */
-class FltVideoPlayerPlugin : FlutterPlugin, MethodCallHandler {
+class FltVideoPlayerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
 
     /// The MethodChannel that will the communication between Flutter and native Android
@@ -35,24 +37,51 @@ class FltVideoPlayerPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-        if (call.method == "getPlatformVersion") {
-            result.success("Android ${android.os.Build.VERSION.RELEASE}")
-        } else if (call.method == "createVodPlayer") {
-            val vodPlayer = flutterPluginBinding?.let { FltVodPlayer(it) }
-            val playerId = vodPlayer?.getPlayerId() ?: -1
-            players.append(playerId, vodPlayer)
-            result.success(playerId)
-        } else if (call.method == "releaseVodPlayer") {
-            val playerId = call.argument<Int>("playerId") ?: -1
-            val player = players[playerId]
-            player.destory()
-            players.remove(playerId)
-        } else {
-            result.notImplemented()
+        when (call.method) {
+            "getPlatformVersion" -> {
+                result.success("Android ${android.os.Build.VERSION.RELEASE}")
+            }
+            "createVodPlayer" -> {
+                val vodPlayer = flutterPluginBinding?.let { FltVodPlayer(it) }
+                val playerId = vodPlayer?.getPlayerId() ?: -1
+                players.append(playerId, vodPlayer)
+                result.success(playerId)
+            }
+            "releaseVodPlayer" -> {
+                val playerId = call.argument<Int>("playerId") ?: -1
+                val player = players[playerId]
+                player.destory()
+                players.remove(playerId)
+            }
+            else -> {
+                result.notImplemented()
+            }
         }
     }
 
+
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        flutterPluginBinding?.platformViewRegistry?.registerViewFactory(
+            "FltVideoView",
+            FltVideoViewFactory(flutterPluginBinding!!) { viewId: Int, view: FltVideoView ->
+                players.append(viewId, view)
+            }
+        )
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+
+    }
+
+    override fun onDetachedFromActivity() {
+
     }
 }

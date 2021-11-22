@@ -56,6 +56,7 @@ class _SimpleDemoState extends State<SimpleDemo> {
 
     var playerConfig = PlayerConfig();
 
+    //可以通过renderType来配置使用外接纹理方式还是 PlatformView 方式对接，经实测同一视频在安卓机型中两者在内存占用上区别不大，iOS 环境下外接纹理稍高
     controller = VodPlayerController(config: playerConfig);
 
     //监听播放状态

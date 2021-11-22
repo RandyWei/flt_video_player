@@ -2,6 +2,7 @@
 /// Created by wei on 2021/11/5.<br/>
 ///
 ///
+import 'package:flt_video_player/src/vod/platform_video_view.dart';
 import 'package:flt_video_player/src/vod/player_define.dart';
 import 'package:flt_video_player/src/vod/vodplayer_controller.dart';
 import 'package:flutter/services.dart';
@@ -36,9 +37,7 @@ class _VodPlayerState extends State<VodPlayer> {
   Widget build(BuildContext context) {
     return widget.controller.renderType == RenderType.texture
         ? (_textureId == -1 ? Container() : Texture(textureId: _textureId))
-        : UiKitView(
-            viewType: "FltVideoView",
-            creationParamsCodec: const StandardMessageCodec(),
+        : PlatformVideoView(
             onPlatformViewCreated: widget.controller.onPlatformViewCreated,
           );
   }

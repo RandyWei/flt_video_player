@@ -243,8 +243,10 @@ static const int uninitialized = -1;
         playerConfig.connectRetryInterval = [configMap[@"connectRetryInterval"] intValue];
         playerConfig.timeout = [configMap[@"timeout"] intValue];
         playerConfig.keepLastFrameWhenStop = [configMap[@"keepLastFrameWhenStop"] boolValue];
-        playerConfig.firstStartPlayBufferTime = [configMap[@"firstStartPlayBufferTime"] intValue];
-        playerConfig.nextStartPlayBufferTime = [configMap[@"nextStartPlayBufferTime"] intValue];
+        [playerConfig setFirstStartPlayBufferTime: [configMap[@"firstStartPlayBufferTime"] intValue]];
+//        playerConfig.firstStartPlayBufferTime = [configMap[@"firstStartPlayBufferTime"] intValue];
+        [playerConfig setNextStartPlayBufferTime:[configMap[@"nextStartPlayBufferTime"] intValue]];
+//        playerConfig.nextStartPlayBufferTime = [configMap[@"nextStartPlayBufferTime"] intValue];
         
         NSString *cacheFolderPath = [configMap[@"cacheFolderPath"] stringValue];
         if (cacheFolderPath != nil && cacheFolderPath.length > 0) {
@@ -261,13 +263,15 @@ static const int uninitialized = -1;
         NSString *overlayKey = [configMap[@"overlayKey"] stringValue];
         
         if (overlayKey != nil && overlayKey.length > 0) {
-            playerConfig.overlayKey = overlayKey;
+//            playerConfig.overlayKey = overlayKey;
+            [playerConfig setOverlayKey:overlayKey];
         }
         
         NSString *overlayIv = [configMap[@"overlayIv"] stringValue];
         
         if (overlayIv != nil && overlayIv.length > 0) {
-            playerConfig.overlayIv = overlayIv;
+//            playerConfig.overlayIv = overlayIv;
+            [playerConfig setOverlayIv:overlayIv];
         }
         
         [self createVodPlayer:playerConfig];

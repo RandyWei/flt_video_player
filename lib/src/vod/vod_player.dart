@@ -5,7 +5,6 @@
 import 'package:flt_video_player/src/vod/platform_video_view.dart';
 import 'package:flt_video_player/src/vod/player_define.dart';
 import 'package:flt_video_player/src/vod/vodplayer_controller.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class VodPlayer extends StatefulWidget {

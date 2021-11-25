@@ -295,6 +295,8 @@ class VodPlayerController extends ChangeNotifier
         if (_state == PlayerState.buffering) _updateState(PlayerState.playing);
         break;
       case 2005: //播放进度
+        _value.duration = event["EVT_PLAY_DURATION"] * 1.0;
+        _value.progress = event["EVT_PLAY_PROGRESS"] * 1.0;
         break;
       case 2006:
         _updateState(PlayerState.stopped);

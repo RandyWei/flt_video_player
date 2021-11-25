@@ -5,6 +5,9 @@
 class PlayerValue {
   final PlayerState state;
 
+  double duration = 0;
+  double progress = 0;
+
   PlayerValue.uninitialized() : this(state: PlayerState.stopped);
 
   PlayerValue({required this.state});

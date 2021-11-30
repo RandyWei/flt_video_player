@@ -181,6 +181,17 @@ class VodPlayerController extends ChangeNotifier
   }
 
   ///
+  ///  开始播放前设置时间点
+  ///
+  Future<void> setStartTime(int time) async {
+    if (_isNeedDisposed) return;
+
+    await _initPlayer.future;
+
+    await _channel?.invokeMethod("setStartTime", {"time": time});
+  }
+
+  ///
   /// 设置静音
   ///
   Future<void> setMute(bool enable) async {

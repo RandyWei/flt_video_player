@@ -79,6 +79,12 @@ static const int uninitialized = -1;
     return -1;
 }
 
+-(void) setStartTime: (CGFloat) time{
+    if (_vodPlayer != nil) {
+        [_vodPlayer setStartTime:time];
+    }
+}
+
 -(float) currentPlaybackTime {
     if (_vodPlayer != nil) {
         return [_vodPlayer currentPlaybackTime];
@@ -296,6 +302,10 @@ static const int uninitialized = -1;
         float time = [args[@"time"] intValue];
         BOOL r = [self seek:time];
         result([NSNumber numberWithBool:r]);
+    } else if ([@"setStartTime" isEqualToString:call.method]){
+        float time = [args[@"time"] floatValue];
+        [self setStartTime:time];
+        result(nil);
     } else if([@"currentPlaybackTime" isEqualToString:call.method]){
         result(@([self currentPlaybackTime]));
     } else if ([@"duration" isEqualToString:call.method]){

@@ -58,12 +58,16 @@ class _SimpleDemoState extends State<SimpleDemo> {
         title: const Text('Plugin example app'),
       ),
       body: Center(
-        child: AspectRatio(
-          aspectRatio: _aspectRation,
-          child: VodPlayer(
-            controller: controller,
+        child: Column(children: [
+          AspectRatio(
+            aspectRatio: _aspectRation,
+            child: VodPlayer(
+              controller: controller,
+            ),
           ),
-        ),
+          ElevatedButton(onPressed: (){
+            controller.seek(60);}, child: Text("Seek"))
+        ],),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -72,6 +76,7 @@ class _SimpleDemoState extends State<SimpleDemo> {
           //https://look.chinahrt.com.cn/courseyun/rxsl2content/transcode/20211/be3b6935-f678-4303-a1f8-b2a006352656/283006-mp4.mp4
           //https://video.qiantucdn.com/58pic/00/20/21/09v58PICJQgaWdcC58PICSUbK.mp4?e=1636441061&token=OyzEe_0O8H433pm7zVEjtnSy5dVdfpsIawO2nx3f:eHu6r0m7_zdDEj-L6lTqq_6OYPs=
           //https://stream7.iqilu.com/10339/article/202002/18/2fca1c77730e54c7b500573c2437003f.mp4
+          controller.setStartTime(60);
           controller.play(
               "https://stream7.iqilu.com/10339/article/202002/18/2fca1c77730e54c7b500573c2437003f.mp4");
         },

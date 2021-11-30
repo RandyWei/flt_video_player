@@ -141,6 +141,14 @@ open class FltBasePlayer(private val flutterPluginBinding: FlutterPlugin.Flutter
                 result.success(null)
             }
 
+            "setStartTime" -> {
+                val time = call.argument<Int>("time")?.toFloat()
+                if (time != null) {
+                    vodPlayer?.setStartTime(time)
+                }
+                result.success(null)
+            }
+
             "currentPlaybackTime" -> {
                 result.success(vodPlayer?.currentPlaybackTime)
             }

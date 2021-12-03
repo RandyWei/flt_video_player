@@ -2,10 +2,6 @@ import 'package:flt_video_player_example/full/full_player_demo.dart';
 import 'package:flt_video_player_example/platform_view_demo.dart';
 import 'package:flt_video_player_example/simple_demo.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:flt_video_player/flt_video_player.dart';
 
 void main() {
   runApp(const MyApp());

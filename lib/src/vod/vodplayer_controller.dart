@@ -91,7 +91,7 @@ class VodPlayerController extends ChangeNotifier
         EventChannel("${Plugin.methodChannelPrefix}/vodplayer/net/$_playerId")
             .receiveBroadcastStream("net")
             .listen(_netHandler);
-    _initPlayer.complete(_playerId);
+    if (!_initPlayer.isCompleted) _initPlayer.complete(_playerId);
   }
 
   ///
@@ -387,7 +387,6 @@ class VodPlayerController extends ChangeNotifier
 
   @override
   void dispose() async {
-
     _isNeedDisposed = true;
 
     if (!_isDisposed) {

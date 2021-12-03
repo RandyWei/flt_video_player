@@ -1,7 +1,6 @@
 ///
 /// Created by wei on 2021/11/8.<br/>
 ///
-
 import 'package:flt_video_player/flt_video_player.dart';
 import 'package:flutter/material.dart';
 import "package:flutter/widgets.dart";
@@ -16,10 +15,14 @@ class SimpleDemo extends StatefulWidget {
 class _SimpleDemoState extends State<SimpleDemo> {
   late VodPlayerController controller;
   double _aspectRation = 16 / 9;
+  late GlobalKey _videoViewKey;
 
   @override
   void initState() {
     super.initState();
+
+    //用来保证视频 view 不会被刷新
+    _videoViewKey = GlobalKey();
 
     var playerConfig = PlayerConfig();
     playerConfig.headers = {"Referer": "https://videoadmin.chinahrt.com"};
@@ -58,16 +61,22 @@ class _SimpleDemoState extends State<SimpleDemo> {
         title: const Text('Plugin example app'),
       ),
       body: Center(
-        child: Column(children: [
-          AspectRatio(
-            aspectRatio: _aspectRation,
-            child: VodPlayer(
-              controller: controller,
+        child: Column(
+          children: [
+            AspectRatio(
+              aspectRatio: _aspectRation,
+              child: VodPlayer(
+                key: _videoViewKey,
+                controller: controller,
+              ),
             ),
-          ),
-          ElevatedButton(onPressed: (){
-            controller.seek(60);}, child: Text("Seek"))
-        ],),
+            ElevatedButton(
+                onPressed: () {
+                  controller.seek(60);
+                },
+                child: Text("Seek"))
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

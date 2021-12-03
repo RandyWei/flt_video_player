@@ -225,7 +225,7 @@ open class FltBasePlayer(private val flutterPluginBinding: FlutterPlugin.Flutter
         netEventSink.success(getParams(0, bundle))
     }
 
-    open fun destory() {
+    open fun destroy() {
         stopPlay(false)
         vodPlayer = null
     }

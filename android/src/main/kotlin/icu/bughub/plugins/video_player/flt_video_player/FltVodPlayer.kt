@@ -1,19 +1,12 @@
 package icu.bughub.plugins.video_player.flt_video_player
 
-import android.content.Context
 import android.graphics.SurfaceTexture
-import android.os.Bundle
 import android.view.Surface
-import com.tencent.rtmp.ITXVodPlayListener
 import com.tencent.rtmp.TXVodPlayConfig
-import com.tencent.rtmp.TXVodPlayer
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.EventChannel
-import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.view.TextureRegistry
-import kotlin.math.max
-import kotlin.math.min
 
 class FltVodPlayer(private val flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) :
     FltBasePlayer(flutterPluginBinding) {
@@ -60,9 +53,9 @@ class FltVodPlayer(private val flutterPluginBinding: FlutterPlugin.FlutterPlugin
         })
     }
 
-    override fun destory() {
+    override fun destroy() {
 
-        super.destory()
+        super.destroy()
 
         surfaceTextureEntry?.release()
         surfaceTextureEntry = null

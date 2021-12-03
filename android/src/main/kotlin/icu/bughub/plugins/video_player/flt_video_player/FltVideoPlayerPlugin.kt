@@ -34,6 +34,12 @@ class FltVideoPlayerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "${CHANNEL_PREFIX}/flt_video_player"
         )
         channel.setMethodCallHandler(this)
+        flutterPluginBinding.platformViewRegistry.registerViewFactory(
+            "FltVideoView",
+            FltVideoViewFactory(flutterPluginBinding) { viewId: Int, view: FltVideoView ->
+                players.append(viewId, view)
+            }
+        )
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -50,7 +56,7 @@ class FltVideoPlayerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "releaseVodPlayer" -> {
                 val playerId = call.argument<Int>("playerId") ?: -1
                 val player = players[playerId]
-                player.destory()
+                player.destroy()
                 players.remove(playerId)
             }
             else -> {
@@ -65,12 +71,7 @@ class FltVideoPlayerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        flutterPluginBinding?.platformViewRegistry?.registerViewFactory(
-            "FltVideoView",
-            FltVideoViewFactory(flutterPluginBinding!!) { viewId: Int, view: FltVideoView ->
-                players.append(viewId, view)
-            }
-        )
+
     }
 
     override fun onDetachedFromActivityForConfigChanges() {

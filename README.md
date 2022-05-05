@@ -35,6 +35,12 @@ ndk {
 <manifest
 ```
 
+在proguard-rules.pro中添加混淆规则
+```
+-keep class com.tencent.** { *; }
+```
+
+
 ## Example
 
 ```dart

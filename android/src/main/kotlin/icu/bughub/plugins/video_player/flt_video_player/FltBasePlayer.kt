@@ -59,7 +59,7 @@ open class FltBasePlayer(private val flutterPluginBinding: FlutterPlugin.Flutter
 
 
     private fun startPlay(url: String): Int {
-        return vodPlayer?.startVodPlay(url) ?: uninitialized
+        return vodPlayer?.startPlay(url) ?: uninitialized
     }
 
 

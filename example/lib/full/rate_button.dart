@@ -1,16 +1,17 @@
 ///
 /// Created by wei on 2021/11/11.<br/>
 ///
+import 'package:flt_video_player/flt_video_player.dart';
 import 'package:flt_video_player_example/define/function_define.dart';
 import 'package:flutter/material.dart';
-import "package:flutter/widgets.dart";
 
 class RateButton extends StatefulWidget {
-  const RateButton({Key? key, required this.rate, this.callback})
+  const RateButton({Key? key, required this.controller, this.callback})
       : super(key: key);
 
   final ControlButtonCallback<double>? callback;
-  final double rate;
+
+  final VodPlayerController controller;
 
   @override
   _RateButtonState createState() => _RateButtonState();
@@ -24,8 +25,8 @@ class _RateButtonState extends State<RateButton> {
   @override
   void initState() {
     super.initState();
-    _rate = widget.rate;
-    _index = _rates.indexWhere((element) => element == widget.rate);
+    _rate = widget.controller.rate;
+    _index = _rates.indexWhere((element) => element == _rate);
   }
 
   @override
@@ -41,6 +42,7 @@ class _RateButtonState extends State<RateButton> {
           _index = 0;
         }
         _rate = _rates[_index];
+        widget.controller.setRate(_rate);
         setState(() {});
         widget.callback?.call(_rate);
       },

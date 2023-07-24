@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:core';
 
 import 'package:flt_video_player/flt_video_player.dart';
 import 'package:flt_video_player/src/plugin.dart';
@@ -53,6 +54,12 @@ class VodPlayerController extends ChangeNotifier
   PlayerConfig? config;
 
   RenderType? renderType;
+
+  double _rate = 1.0;
+
+  double get rate {
+    return _rate;
+  }
 
   VodPlayerController({this.config, this.renderType = RenderType.texture})
       : _initPlayer = Completer(),
@@ -216,6 +223,8 @@ class VodPlayerController extends ChangeNotifier
   /// @param rate 正常速度为1.0；小于为慢速；大于为快速。最大建议不超过2.0
   Future<void> setRate(double rate) async {
     if (_isNeedDisposed) return;
+
+    _rate = rate;
 
     await _initPlayer.future;
 

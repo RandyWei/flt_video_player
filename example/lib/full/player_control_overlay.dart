@@ -2,9 +2,7 @@
 /// Created by wei on 2021/11/11.<br/>
 ///
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flt_video_player/flt_video_player.dart';
 import 'package:flt_video_player_example/full/full_screen_button.dart';
@@ -12,7 +10,6 @@ import 'package:flt_video_player_example/full/play_button.dart';
 import 'package:flt_video_player_example/full/rate_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import "package:flutter/widgets.dart";
 import 'package:orientation/orientation.dart';
 
 class ControlOverlay extends StatefulWidget {
@@ -40,7 +37,7 @@ class _ControlOverlayState extends State<ControlOverlay> {
   bool _showBigPlayButton = true;
 
   bool _showControlBar = false;
-  bool _showTitleBar = false;
+  final bool _showTitleBar = false;
 
   bool _isPlaying = false;
 
@@ -48,7 +45,6 @@ class _ControlOverlayState extends State<ControlOverlay> {
 
   double duration = 0;
   double progress = 0;
-  double rate = 1.0;
 
   @override
   void initState() {
@@ -83,7 +79,6 @@ class _ControlOverlayState extends State<ControlOverlay> {
           if (_showControlBar && mounted) {
             duration = event["EVT_PLAY_DURATION"] * 1.0;
             progress = event["EVT_PLAY_PROGRESS"] * 1.0;
-            rate = event["EVT_PLAYABLE_RATE"] * 1.0;
             setState(() {});
           }
           break;
@@ -109,7 +104,7 @@ class _ControlOverlayState extends State<ControlOverlay> {
   }
 
   get isPortraitUp {
-    Size screenSize = MediaQueryData.fromWindow(window).size;
+    Size screenSize = MediaQueryData.fromView(View.of(context)).size;
     return screenSize.width < screenSize.height;
   }
 
@@ -210,7 +205,7 @@ class _ControlOverlayState extends State<ControlOverlay> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: RateButton(
-                          rate: rate,
+                          controller: widget.controller,
                           callback: (rate) {
                             widget.controller.setRate(rate);
                           },
